@@ -1,0 +1,11 @@
+.env
+.env.*
+
+/node_modules
+
+# don't commit your tenant folders
+/src/tenants/*
+# but DO commit the tenant index.js file
+!/src/tenants/index.js
+
+.DS_Store
