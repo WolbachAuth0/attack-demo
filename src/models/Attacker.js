@@ -42,9 +42,15 @@ class Attacker {
       const body = {
         email,
         password,
-        connection: this.connection.name
+        connection: this.connection.name,
+        client_id: this.client.client_id
       }
-      const response = await axios.post(`${this.URL}/dbconnections/signup`, body)
+      const config = {
+        headers: {
+          'content-type': 'application/json'
+        }
+      }
+      const response = await axios.post(`${this.URL}/dbconnections/signup`, JSON.stringify(body), config)
       return response.status;
     } catch (error) {
       return error.response.status
@@ -61,7 +67,7 @@ class Attacker {
 
   async fraudulentSignups ({ count }) {
     for (let i = 0; i < count; i++) {
-      const email = `fraud.user${i + 1}@auth0.com`
+      const email = `fraud.user${i + 10}@auth0.com`
       const password = `P@ssw0rd!`
       const status = await this.attemptSignup(email, password)
       console.log(`attempt #${i + 1} - email= ${chalk.blueBright(email)}, PW= ${chalk.blueBright(password)}: ${this.prettifyResponse(status)}`)
