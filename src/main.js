@@ -4,7 +4,8 @@ const chalk = require('chalk')
 const Attacker = require('./models/Attacker')
 const scopes = [
   'read:clients',
-  'read:client_keys'
+  'read:client_keys',
+  'read:connections'
 ]
 
 main()
