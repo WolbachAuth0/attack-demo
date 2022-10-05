@@ -6,29 +6,37 @@ the security features of the Okta Consumer Identity Cloud. This script
 gives a convenient command line tool which simulates various sign-on
 attacks.
 
-
 ## Installation
 
 Before attempting to install this project make sure you have installed
 [Node.js](https://nodejs.org/) version 16.14.X or higher. Open a command
 line terminal and cd to the directory where you want to hold this code base.
-Clone this repository, cd into the attack-demo directory and install the
-node dependencies.
 
+Clone this repository, 
 ```bash
   git clone https://github.com/WolbachAuth0/attack-demo.git
+```
+
+Go to the project directory
+
+```bash
   cd attack-demo
+```
+
+Install dependencies
+
+```bash
   npm install
 ```
 
-## Environment Variables
+## Set Up
 
 To run this project you will need a seperate `.env` file for each CIC
 tenant you wish to simulate attacks against. You can set up the attack
 demo to run agains as many CIC tenants as you want. You need only to 
 follow the instructions below for each of your tenants.
 
-#### Set Up Your CIC Tenant
+### Configure CIC Tenant
 
 In your CIC tenant, create a new M2M application and give it an 
 appropriate name (e.g. "Attack Scripts M2M").
@@ -45,12 +53,12 @@ scopes to the connection;
   'read:attack_protection'
 ```
 
-![Attack Demo Scripts M2M](https://github.com/WolbachAuth0/attack-demo/blob/main/public/scopes.png?raw=true)
+![Scopes](https://github.com/WolbachAuth0/attack-demo/blob/main/public/scopes.png?raw=true)
 
 Then go to the settings tab of the M2M application and make a note of
 the `Domain`, `Client ID`, `Client Secret`.
 
-#### Add Your Tenant Environment to Code
+### Add Environment Variables
 
 Open a terminal and cd into the directory where this code base is 
 stored. Then 
@@ -72,10 +80,24 @@ AUTH0_CLIENT_ID=<m2m-application-client-id>
 ```
 
 You're now ready to simulate attacks against your tenant.
+## Run Locally
 
-## Acknowledgements
+From a terminal, cd into the attack-demo directory and run
 
- - [Awesome Readme Templates](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
- - [Awesome README](https://github.com/matiassingers/awesome-readme)
- - [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
+```bash
+  npm run start
+```
+
+the attack demo tool will execute.
+
+![Demo](https://github.com/WolbachAuth0/attack-demo/blob/main/public/Attack-Demo.gif?raw=true)
+
+## Resources
+
+ - [Attack Protection](https://auth0.com/docs/secure/attack-protection)
+ - [Auth0 Authentication API Docs](https://auth0.com/docs/api/authentication)
+ - [Auth0 nodejs SDK Docs](https://auth0.github.io/node-auth0/index.html)
+ - [Readme.so](https://readme.so)
+ 
+
 
