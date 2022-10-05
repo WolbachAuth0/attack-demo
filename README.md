@@ -79,7 +79,7 @@ AUTH0_CLIENT_SECRET=<m2m-application-client-secret>
 AUTH0_CLIENT_ID=<m2m-application-client-id>
 ```
 
-For more detail, see (THIS)[https://github.com/WolbachAuth0/attack-demo/tree/main/src/tenants]
+For more detail, see [THIS](https://github.com/WolbachAuth0/attack-demo/tree/main/src/tenants)
 
 You're now ready to simulate attacks against your tenant.
 ## Run Locally
