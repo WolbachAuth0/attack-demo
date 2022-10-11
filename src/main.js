@@ -133,13 +133,11 @@ async function runCredentialStuffingAttack (attacker) {
       }
     ])
 
-  console.log('\n', chalk.bold.underline.blueBright('Begin Auth0 Scripted Attack Attempt'), '\n')
-  console.log('Attack Type: ', chalk.bold.green('Credential Stuffing Attack'))
-  console.log('number of attempts: ', chalk.bold.green(attempts.name))
-  console.log('Auth0 tenant: ', chalk.bold.green(attacker.tenant.name))
-  console.log('application: ', chalk.bold.green(`${attacker.client.name} (id= ${attacker.client.client_id})`))
-  console.log('connection: ', chalk.bold.green(`${attacker.connection.name} (id= ${attacker.connection.id})`))
-  console.log('\n')
+  await confirmAttack(attacker, {
+    type: 'Credential Stuffing Attack',
+    email: null,
+    attempts: attempts.name
+  })
 
   attacker.credentialStuffing({ attempts: attempts.name })
 }
@@ -182,14 +180,11 @@ async function runBruteForceAttack (attacker) {
       }
     ])
 
-  console.log('\n', chalk.bold.underline.blueBright('Begin Auth0 Scripted Attack Attempt'), '\n')
-  console.log('Attack Type: ', chalk.bold.green('Brute Force Attack'))
-  console.log('email address: ', chalk.bold.green(email.name))
-  console.log('number of attempts: ', chalk.bold.green(attempts.name))
-  console.log('Auth0 tenant: ', chalk.bold.green(attacker.tenant.name))
-  console.log('application: ', chalk.bold.green(`${attacker.client.name} (id= ${attacker.client.client_id})`))
-  console.log('connection: ', chalk.bold.green(`${attacker.connection.name} (id= ${attacker.connection.id})`))
-  console.log('\n')
+  await confirmAttack(attacker, {
+    type: 'Brute Force Attack',
+    email: email.name,
+    attempts: attempts.name
+  })
   
   attacker.credentialStuffing({ email: email.name, attempts: attempts.name })
 }
@@ -217,15 +212,41 @@ async function runFraudulentSignupAttack (attacker) {
       }
     ])
   
-  console.log('\n', chalk.bold.underline.blueBright('Begin Auth0 Scripted Attack Attempt'), '\n')
-  console.log('Attack Type: ', chalk.bold.green('Fraudulent Signup Attack'))
-  console.log('number of sign ups: ', chalk.bold.green(count.name))
-  console.log('auth0 tenant: ', chalk.bold.green(attacker.tenant.name))
-  console.log('application: ', chalk.bold.green(`${attacker.client.name} (id= ${attacker.client.client_id})`))
-  console.log('connection: ', chalk.bold.green(`${attacker.connection.name} (id= ${attacker.connection.id})`))
-  console.log('\n')
+  await confirmAttack(attacker, {
+    type: 'Fraudulent Signup Attack',
+    email: null,
+    attempts: count.name
+  })
 
   attacker.fraudulentSignups({ count: count.name })
+}
+
+async function confirmAttack (attacker, { type, email = null, attempts }) {
+  console.log('\n')
+  console.log(chalk.bold.underline.blueBright('Attack profile:'))
+  console.log('Attack Type: ', chalk.bold.green(type))
+  console.log('Auth0 tenant: ', chalk.bold.green(attacker.tenant.name))
+  console.log('application: ', chalk.bold.green(`${attacker.client.name} (id= ${attacker.client.client_id})`))
+  console.log('connection: ', chalk.bold.green(`${attacker.connection.name} (id= ${attacker.connection.id})`))
+  if (email) {
+    console.log('email address: ', chalk.bold.green(email))
+  }
+  console.log('number of attempts: ', chalk.bold.green(attempts))
+  console.log('\n')
+  
+  const proceed = await inquirer
+    .prompt([
+      {
+        type: 'confirm',
+        name: 'name',
+        message: 'Proceed with attack simulation?',
+        default: true
+      }
+    ])
+
+  if (!proceed.name) {
+    process.exit(1)
+  }
 }
 
 function handleError (error) {
