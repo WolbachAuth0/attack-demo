@@ -1,10 +1,38 @@
 
 # Okta CIC Attack Demo
 
-The purpose of this project is to provide a tool for demonstrating
-the security features of the Okta Consumer Identity Cloud. This script
-gives a convenient command line tool which simulates various sign-on
-attacks.
+The purpose of this project is to provide a tool for demonstrating the security features of the Okta Consumer Identity Cloud. This script gives a convenient command line tool which simulates various sign-on attacks.
+
+## Attacks Simulated
+
+The purpose of this library is to perform demonstrations of Okta CIC security features (security center, bot detection, brute force detection, etc.). Hence the various attack simulation options are designed to simulate the events that are tracked by these features. 
+
+This library can bulk simulate the events below which the Okta CIC platform recognizes as attacks. Please note that each of these events can occur on accident in normal use - we have all put our passwords in incorrectly or messed up a captcha. But when these events occur in bulk, or 
+
+**Failed Logins:**
+Occurs when a user fails to login. When that happens, for example when an existing user enters an incorrect password or when an unregistered user attempts to login, the Okta CIC Security Center will flag that event as a "Credential Stuffing" attack.
+
+**Failed Signups:**
+Occurs when an attempt to register a new user fails. When a new user registration event fails, for example when a captcha is failed during signup, the Okta CIC Security Center will flag that event as a "Signup Attack".
+
+**Failed 2FA:**
+Occurs when an attempt to enter a second factor of authentication fails. When this happens, for example when a user receives an MFA code via SMS, email or TOTP but mis-enters it into the provided form, the Okta CIC Security Center flags that event as an "MFA Bypass" attack.
+
+#### Brute Force Attack
+
+An attempt to compromise a specific user's credentials by guessing and checking that user's password. It generally appears as many attempts of a single user to login.  
+
+#### Credential Stuffing Attack
+
+An attempt to compromise the credentials of many users by attempting to login as those users with credentials they have found elsewhere. This attack presents itself as many failed logins from many users over a short period of time.
+
+#### Fraudulent Registration Attack
+
+Occurs when a bad actor attempts to create new accounts which the attacker can control. It usually appears as many failed signup events over a short period of time.
+
+#### MFA Bypass Attack
+
+Occurs when a bad actor has successfully compromised a user's first factor of authentication (e.g. username + password), but hasn't compromised their second factor (e.g. the user's phone, email, totp provider or biometrics). This kind of attack presents itself as a group of failed 2FA events over a short period of time.
 
 ## Installation
 
@@ -82,6 +110,7 @@ AUTH0_CLIENT_ID=<m2m-application-client-id>
 For more detail, see [THIS](https://github.com/WolbachAuth0/attack-demo/tree/main/src/tenants)
 
 You're now ready to simulate attacks against your tenant.
+
 ## Run Locally
 
 From a terminal, cd into the attack-demo directory and run
