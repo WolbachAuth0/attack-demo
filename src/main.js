@@ -186,7 +186,7 @@ async function runBruteForceAttack (attacker) {
     attempts: attempts.name
   })
   
-  attacker.credentialStuffing({ email: email.name, attempts: attempts.name })
+  attacker.bruteForce({ email: email.name, attempts: attempts.name })
 }
 
 async function runFraudulentSignupAttack (attacker) {

@@ -62,6 +62,10 @@ class Attacker {
    * @param {number} param.length   The minimum number of characters of the password
    */
   static generatePassword ({ strength = 'good', length = 8 }) {
+    /*
+    TODO: make sure password strength is sufficient
+    
+    */
     const alpha = 'abcdefghijklmnopqrstuvwxyz'
     const chars = '!@#$%^&*'
     const lengthVariation = Math.floor(Math.random() * 4)
